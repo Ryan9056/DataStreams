@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
@@ -10,7 +11,9 @@ public class DataFrame extends JFrame {
     JPanel mainPnl;
     JPanel displayPnl;
     JPanel controlPnl;
+    JPanel buttonPnl;
 
+    JButton button;
     JTextArea displayTA;
     JScrollPane scroller;
 
@@ -32,6 +35,10 @@ public class DataFrame extends JFrame {
         mainPnl = new JPanel();
         mainPnl.setLayout(new BorderLayout());
 
+
+        createButtonPanel();
+       mainPnl.add(buttonPnl, BorderLayout.NORTH);
+
         createDisplayPanel();
         mainPnl.add(displayPnl, BorderLayout.CENTER);
 
@@ -45,6 +52,29 @@ public class DataFrame extends JFrame {
         setVisible(true);
     }
 
+    private void createButtonPanel()
+    {
+
+        buttonPnl = new JPanel();
+        button = new JButton("Word Query");
+        button.addActionListener((ActionEvent ae) -> {
+
+            word = JOptionPane.showInputDialog("Input a word you would like to search for");
+
+
+            linenumbers = DataProcess.lineread(word);
+
+            for (int i = 0; i < linenumbers.size(); i++) {
+                displayTA.append(word + " was found on line: " + linenumbers.get(i) + "\n");
+            }
+                }
+        );
+        buttonPnl.add(button);
+
+
+
+        }
+
 
 
 
@@ -56,17 +86,6 @@ public class DataFrame extends JFrame {
         displayTA = new JTextArea(10, 35);
         displayTA.setFont(new Font("Georgia", Font.PLAIN, 14));
         displayTA.setEditable(false);
-
-        word = JOptionPane.showInputDialog("Input a word you would like to search for");
-
-
-        linenumbers = DataProcess.lineread(word);
-
-        for (int i = 0; i < linenumbers.size(); i++) {
-            displayTA.append("Your word was found on line: " + linenumbers.get(i) + "\n");
-        }
-
-
         scroller = new JScrollPane(displayTA);
         displayPnl.add(scroller);
     }
